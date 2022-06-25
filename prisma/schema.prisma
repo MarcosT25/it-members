@@ -1,0 +1,48 @@
+datasource db {
+  url      = env("DATABASE_URL")
+  provider = "mysql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  trainee
+  assessor
+  coordenador
+  diretor
+}
+
+enum Team {
+  desenvolvimento
+  comercial
+  marketing
+}
+
+enum Stack {
+  back_end
+  front_end
+  fullstack
+  web
+  mobile
+}
+
+model Member {
+  id    Int     @id @default(autoincrement())
+  name  String?
+  email String  @unique
+  role  Role
+  team  Team
+  stack Stack
+  lead Lead[]
+}
+
+model Lead {
+  id Int @id @default(autoincrement())
+  name String?
+  email String? @unique
+  faseFunil Int?
+  responsible Member? @relation(fields: [responsibleId], references: [id])
+  responsibleId Int?
+}
